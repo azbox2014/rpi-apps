@@ -1,0 +1,22 @@
+version: "2"
+services:
+    alpine-repos:
+        image: "archie2016/rpi-alpine-repos"
+        volumes:
+            - /data/apps/alpine-repos:/data
+        logging:
+            driver: "none"
+    centos-repos:
+        image: "archie2016/rpi-alpine"
+        command: "/data/bin/start.sh"
+        volumes:
+            - /data/apps/centos-repos:/data
+        logging:
+            driver: "none"
+    raspbian-repos:
+        image: "archie2016/rpi-debian"
+        command: "/data/bin/start.sh"
+        volumes:
+            - /data/apps/rpi-repos:/data
+        logging:
+            driver: "none"

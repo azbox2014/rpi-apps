@@ -1,0 +1,37 @@
+version: '2'
+services:
+    alpine-repos:
+        image: archie2016/rpi-nginx
+        volumes:
+            - /data/apps/alpine-repos:/usr/share/nginx/html/alpine
+            - ./def-nginx:/etc/nginx/conf.d
+        logging:
+            driver: "none"
+    centos-repos:
+        image: "archie2016/rpi-nginx"
+        volumes:
+            - /data/apps/centos-repos:/usr/share/nginx/html/centos
+            - ./def-nginx:/etc/nginx/conf.d
+        logging:
+            driver: "none"
+    raspbian-repos:
+        image: "archie2016/rpi-nginx"
+        volumes:
+            - /data/apps/rpi-repos/mirror:/usr/share/nginx/html/rasp
+            - ./def-nginx:/etc/nginx/conf.d
+        logging:
+            driver: "none"
+    public:
+        image: archie2016/rpi-nginx
+        depends_on:
+            - alpine-repos
+            - centos-repos
+            - raspbian-repos
+        links:
+            - alpine-repos
+            - centos-repos
+            - raspbian-repos
+        ports:
+            - 80:80
+        volumes:
+            - ./ng-site:/etc/nginx/conf.d

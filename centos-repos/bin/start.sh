@@ -1,0 +1,43 @@
+#!/bin/sh
+# description:	sync centos 6.8 to local
+#
+
+# install packages
+[ -z `which rsync` ] && {
+    apk update
+    apk add rsync
+    mkdir -p /data/logs
+}
+
+CMD=/usr/bin/rsync
+LOCAL_PATH=/data
+EXCLUDE_PATH=$LOCAL_PATH/conf/exclude
+INCLUDE_PATH=$LOCAL_PATH/conf/include
+TMP_ADDRESS=/tmp/address_files
+#
+#echo -n > $TMP_ADDRESS
+echo "rsync://mirrors.dwhd.org/centos $LOCAL_PATH/centos $INCLUDE_PATH/centos centos
+rsync://mirrors.dwhd.org/epel $LOCAL_PATH/epel $INCLUDE_PATH/epel epel" >> $TMP_ADDRESS
+#echo "rsync://mirrors.163.com/centos $LOCAL_PATH/centos $INCLUDE_PATH/centos centos
+#rsync://mirrors.163.com/epel $LOCAL_PATH/epel $INCLUDE_PATH/epel epel" >> $TMP_ADDRESS
+
+rsync_mirrors() {
+    #$CMD -ruvzai4CH --safe-links --numeric-ids --delete --delete-delay --include-from=$3 --delay-updates $1 $2 &> /tmp/$4 &
+    #$CMD -ruvzai4CH --safe-links --numeric-ids --delete --delete-delay --include-from=$3 --delay-updates $1 $2 
+    $CMD -ruvzai4CH --safe-links --numeric-ids --delete --include-from=$3 $1 $2 
+}
+
+cat $TMP_ADDRESS | while read MIRROR SAVEPATH EXC OUT
+do
+    rsync_mirrors $MIRROR $SAVEPATH $EXC $OUT &> /data/logs/$OUT.log
+done
+rm -f $TMP_ADDRESS
+
+
+#   CentOS rsync://mirrors.dwhd.org/centos            #
+#   EPEL rsync://mirrors.dwhd.org/epel                #
+#   RepoForge rsync://mirrors.dwhd.org/repoforge      #
+#   MariaDB rsync://mirrors.dwhd.org/mariadb          #
+#   MySQL rsync://mirrors.dwhd.org/mysql              #
+#   Percona rsync://mirrors.dwhd.org/percona          #
+#   LinuxEye rsync://mirrors.dwhd.org/linuxeye

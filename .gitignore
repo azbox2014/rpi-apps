@@ -1,0 +1,18 @@
+# alpine repos
+alpine-repos/v3.*
+alpine-repos/logs/*
+
+# centos repos
+centos-repos/centos/*
+centos-repos/epel/*
+centos-repos/logs/*
+
+# raspbian repos
+rpi-repos/logs/*
+rpi-repos/mirror/*
+rpi-repos/skel/*
+rpi-repos/var/*
+!rpi-repos/var/*.sh
+
+nfs-server/logs/*
+rsync-server/logs/*

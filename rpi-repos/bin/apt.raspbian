@@ -1,0 +1,5 @@
+#!/bin/bash
+# description:	sync raspbian repository
+
+
+/usr/bin/apt-mirror /data/conf/mirror.list
